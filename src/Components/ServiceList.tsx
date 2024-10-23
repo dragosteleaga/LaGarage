@@ -15,7 +15,7 @@ import { useLanguage } from './LanguageContext.tsx';
 
 const ServiceList = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { language, changeLanguage } = useLanguage();
+  const { language } = useLanguage();
   const content = {
     en: content_en,
     de: content_de,

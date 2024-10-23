@@ -1,5 +1,5 @@
-import { ReactNode, useEffect } from "react";
-import React, { useState } from "react";
+import { ReactNode } from "react";
+import React from "react";
 import {
   Box,
   Flex,
@@ -7,7 +7,6 @@ import {
   Link,
   IconButton,
   useDisclosure,
-  Button,
   Stack,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
@@ -21,42 +20,16 @@ import content_ru from "../Content/content_ru.json";
 import content_po from "../Content/content_po.json";
 import { useLanguage } from "./LanguageContext.tsx";
 
+const backgroundColor = "rgba(13, 17, 23, 0.95)"; // Deep blue background
+
 const NavLink = ({
   children,
   onClose,
 }: {
   children: ReactNode;
   onClose: () => void;
-}) => (
-  <ScrollLink
-    to={children?.toString().toLowerCase().replace(/\s+/g, "-")}
-    smooth={true}
-    duration={500}
-    spy={true}
-    exact="true"
-    offset={-70}
-  >
-    <Link
-      px={2}
-      py={1}
-      rounded={"md"}
-      _hover={{
-        textDecoration: "none",
-        bg: "rgba(13, 17, 23, 0.8)", // Dark blue on hover
-      }}
-      onClick={onClose} // Close the menu when a link is clicked
-    >
-      {children}
-    </Link>
-  </ScrollLink>
-);
-
-export default function Simple() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [setLanguage] = useState("en");
-  const { language, changeLanguage } = useLanguage();
-
-  // Content based on selected language
+}) => {
+  const { language } = useLanguage();
   const content = {
     en: content_en,
     de: content_de,
@@ -65,80 +38,45 @@ export default function Simple() {
     po: content_po,
   };
 
-  // Links based on selected language
-  const Links = [
-    content[language]["nav_text_1"],
-    content[language]["nav_text_2"],
-    content[language]["nav_text_3"],
-  ];
-  const NavLink = ({ children, onClose }) => {
-    let childrenLink = children;
-    switch (children) {
-      case content["de"]["nav_text_1"]:
-        childrenLink = content["en"]["nav_text_1"];
-        break;
-      case content["ro"]["nav_text_1"]:
-        childrenLink = content["en"]["nav_text_1"];
-        break;
-      case content["ru"]["nav_text_1"]:
-        childrenLink = content["en"]["nav_text_1"];
-        break;
-      case content["po"]["nav_text_1"]:
-        childrenLink = content["en"]["nav_text_1"];
-        break;
-      case content["de"]["nav_text_2"]:
-        childrenLink = content["en"]["nav_text_2"];
-        break;
-      case content["ro"]["nav_text_2"]:
-        childrenLink = content["en"]["nav_text_2"];
-        break;
-      case content["ru"]["nav_text_2"]:
-        childrenLink = content["en"]["nav_text_2"];
-        break;
-      case content["po"]["nav_text_2"]:
-        childrenLink = content["en"]["nav_text_2"];
-        break;
-      case content["de"]["nav_text_3"]:
-        childrenLink = content["en"]["nav_text_3"];
-        break;
-      case content["ro"]["nav_text_3"]:
-        childrenLink = content["en"]["nav_text_3"];
-        break;
-      case content["ru"]["nav_text_3"]:
-        childrenLink = content["en"]["nav_text_3"];
-        break;
-      case content["po"]["nav_text_3"]:
-        childrenLink = content["en"]["nav_text_3"];
-        break;
-    }
-    return (
-      <ScrollLink
-        to={childrenLink?.toString().toLowerCase().replace(/\s+/g, "-")}
-        smooth={true}
-        duration={500}
-        spy={true}
-        exact="true"
-        offset={-70}
+  // Get the link text based on the selected language
+  const linkText = content[language][`nav_text_${children}`];
+
+  return (
+    <ScrollLink
+      to={linkText?.toString().toLowerCase().replace(/\s+/g, "-")}
+      smooth={true}
+      duration={500}
+      spy={true}
+      exact="true"
+      offset={-70}
+    >
+      <Link
+        px={2}
+        py={1}
+        rounded={"md"}
+        _hover={{
+          textDecoration: "none",
+          bg: "rgba(13, 17, 23, 0.8)",
+        }}
+        onClick={onClose}
       >
-        <Link
-          px={2}
-          py={1}
-          rounded={"md"}
-          _hover={{
-            textDecoration: "none",
-            bg: "rgba(13, 17, 23, 0.8)",
-          }}
-          onClick={onClose}
-        >
-          {children}
-        </Link>
-      </ScrollLink>
-    );
-  };
+        {linkText}
+      </Link>
+    </ScrollLink>
+  );
+};
+
+export default function Simple() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { changeLanguage } = useLanguage();
+
+  // Links based on selected language
+  const Links = [1, 2, 3]; // Assuming nav_text_1, nav_text_2, nav_text_3 are indexed numerically.
+
   return (
     <>
       <Box
-        bg="rgba(13, 17, 23, 0.95)" // Deep blue background
+        bg={backgroundColor}
         color="white"
         px={4}
         boxShadow="md"
@@ -153,7 +91,7 @@ export default function Simple() {
           <IconButton
             size={"md"}
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-            aria-label={"Open Menu"}
+            aria-label={"Toggle Menu"}
             display={{ md: "none" }}
             onClick={isOpen ? onClose : onOpen}
           />
@@ -178,7 +116,7 @@ export default function Simple() {
           </Flex>
         </Flex>
 
-        {isOpen ? (
+        {isOpen && (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
               {Links.map((link) => (
@@ -188,7 +126,7 @@ export default function Simple() {
               ))}
             </Stack>
           </Box>
-        ) : null}
+        )}
       </Box>
     </>
   );

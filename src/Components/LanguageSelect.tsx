@@ -25,9 +25,6 @@ const LanguageSelect = ({ changeLanguage }) => {
     changeLanguage(selectedLanguage);
   };
 
-  const getCurrentLanguage = () => {
-    return currentLanguage;
-  };
 
   return (
     <>

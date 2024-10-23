@@ -16,7 +16,7 @@ import content_ro from "../Content/content_ro.json";
 import content_ru from "../Content/content_ru.json";
 import content_po from "../Content/content_po.json";
 export default function Home2() {
-  const { language, changeLanguage } = useLanguage();
+  const { language } = useLanguage();
   const content = {
     en: content_en,
     de: content_de,

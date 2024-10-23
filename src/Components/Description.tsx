@@ -2,7 +2,6 @@ import React from "react";
 import {
   Box,
   Heading,
-  Link,
   Image,
   Text,
   useColorModeValue,
@@ -27,7 +26,7 @@ const Description = () => {
     ru: content_ru,
     po: content_po,
   };
-  const { language, changeLanguage } = useLanguage();
+  const { language } = useLanguage();
 
   return (
     <Container maxW={"7xl"} p="8">
